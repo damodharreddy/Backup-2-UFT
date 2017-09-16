@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script>
+ $(document).on('click', '#close-preview', function(){ 
+    $('.image-preview').popover('hide');
+    // Hover befor close the preview
+    $('.image-preview').hover(
+        function () {
+           $('.image-preview').popover('show');
+        }, 
+         function () {
+           $('.image-preview').popover('hide');
+        }
+    );    
+});
+
+$(function() {
+    // Create the close button
+    var closebtn = $('<button/>', {
+        type:"button",
+        text: 'x',
+        id: 'close-preview',
+        style: 'font-size: initial;',
+    });
+    closebtn.attr("class","close pull-right");
+    // Set the popover default content
+    $('.image-preview').popover({
+        trigger:'manual',
+        html:true,
+        title: "<strong>File Loaded Successfully</strong>"+$(closebtn)[0].outerHTML,
+        content: "There's no image",
+        placement:'bottom'
+    });
+    // Clear event
+    $('.image-preview-clear').click(function(){
+        $('.image-preview').attr("data-content","").popover('hide');
+        $('.image-preview-filename').val("");
+        $('.image-preview-clear').hide();
+        $('.image-preview-input input:file').val("");
+        $(".image-preview-input-title").text("Browse"); 
+    }); 
+    // Create the preview image
+    $(".image-preview-input input:file").change(function (){   
+        
+        var img = $('<img/>', {
+    
+            id: 'dynamic',
+            width:250,
+            height:200
+        });      
+        var file = this.files[0];
+        var reader = new FileReader();
+        // Set preview image into the popover data-content
+        reader.onload = function (e) {
+            $(".image-preview-input-title").text("Change");
+            $(".image-preview-clear").show();
+            $(".form-control").val(file.name);            
+            img.attr('src', "http://icons.iconarchive.com/icons/carlosjj/microsoft-office-2013/256/Excel-icon.png");
+            $(".image-preview").attr("data-content",$(img)[0].outerHTML).popover("show");
+        }        
+        reader.readAsDataURL(file);
+    });  
+});
+  </script>
+  <style>
+  
+   .container{
+     margin-top:100px;
+ }
+ .image-preview-input {
+     position: relative;
+  overflow: hidden;
+  margin: 0px;    
+     color: #333;
+     background-color: #fff;
+     border-color: #ccc;    
+ }
+ .image-preview-input input[type=file] {
+  position: absolute;
+  top: 0px;
+  right: 0;
+  margin-bottom: 2cm;
+  padding: 0;
+  font-size: 20px;
+  cursor: pointer;
+  opacity: 0;
+  filter: alpha(opacity=0);
+ }
+ .image-preview-input-title {
+     margin-left:10px;
+ }
+ .example1 {
+   background-image: url('http://is4.mzstatic.com/image/thumb/Purple127/v4/ad/28/e7/ad28e7c1-86ba-14da-ae41-f29bd65f27f9/source/1900x1200bb.jpg');
+    background-size : 100%;
+
+     
+ }
+ .rightmenu {
+     position: absolute;
+     top: 0;
+     right: 0;
+     bottom: 0;
+     left: 0;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+ }
+ .file {
+   visibility: hidden;
+   position: absolute;
+ }
+  .fileUpload {
+    position: relative;
+    overflow: hidden;
+}
+.fileUpload input.upload {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    filter: alpha(opacity=0);
+}
+.upload {
+    position: absolute;
+     top: 0;
+    right: 0;
+    bottom: 0;
+    margin-top: 1px;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+  </style>
+</head>
+<body class = "example1">
+
+
+<div class="container">
+     <div class="row">    
+         <div class="col-xs-12 col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">  
+             <!-- image-preview-filename input [CUT FROM HERE]-->
+             <div class="input-group image-preview">
+                 <input style="margin-top: -50px;" type="text" class="form-control" disabled="disabled"> <!-- don't give a name === doesn't send on POST/GET -->
+                 <span class="input-group-btn">
+                     
+                     
+                     <form id        =  "uploadForm"
+                      enctype   =  "multipart/form-data"
+     action    =  "upload"
+     method    =  "post">
+                     <div style="margin-top: -66px;" class="btn btn-default image-preview-input">
+                         <span class="glyphicon glyphicon-folder-open"></span>
+                         <span class="image-preview-input-title">Browse</span>
+                         <input type="file" accept="" value="upload" name="file"> 
+                              <!-- rename it -->
+                     </div>
+                     <div style="position: absolute;left: 135px;top: -68px;" class = "upload"  >
+<input type="submit" value="Upload" class="btn btn btn-info active" name="submit">
+</div>
+
+                 </span>
+
+             </div><!-- /input-group image-preview [TO HERE]--> 
+         </div>
+          
+     </div>
+   </form>
+     
+ </div>
+
+
+</body>
+</html>
+
+
